@@ -395,8 +395,21 @@
   function ajustarLienzo() {
     const fs = !!document.fullscreenElement;
     const vv = window.visualViewport;
-    const vw = Math.max(320, Math.floor(vv ? vv.width : window.innerWidth));
-    const vh = Math.max(200, Math.floor(vv ? vv.height : window.innerHeight));
+    const root = document.documentElement;
+    const screenLong = window.screen ? Math.max(screen.width || 0, screen.height || 0) : 0;
+    const screenShort = window.screen ? Math.min(screen.width || 0, screen.height || 0) : 0;
+    const vw = Math.max(320, Math.ceil(Math.max(
+      window.innerWidth || 0,
+      root.clientWidth || 0,
+      vv ? vv.width : 0,
+      screenLong
+    )));
+    const vh = Math.max(200, Math.ceil(Math.max(
+      window.innerHeight || 0,
+      root.clientHeight || 0,
+      vv ? vv.height : 0,
+      screenShort
+    )));
     const esTactil = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
     const llenarPantalla = ES_ANDROID_NATIVO || esTactil || fs;
 
