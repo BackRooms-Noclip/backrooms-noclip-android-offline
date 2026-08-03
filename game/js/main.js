@@ -1,7 +1,7 @@
 // Arranque: input, bucle de animación y pantalla de título.
 (function () {
   // versión visible del juego (Ajustes); súbela con cada tanda de cambios
-  window.VERSION_JUEGO = 'v0.2.0-beta.1';
+  window.VERSION_JUEGO = 'v0.2.1-beta';
   const ES_ANDROID_NATIVO = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   document.documentElement.classList.toggle('native-android', ES_ANDROID_NATIVO);
   const world = Game.world;

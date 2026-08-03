@@ -3,14 +3,14 @@
 Continuación comunitaria e independiente de **BACKROOMS — No-Clip**, adaptada como aplicación exclusiva para Android.
 
 <!-- latest-release:start -->
-**Última versión preparada:** `v0.2.0-beta.1`
+**Última versión preparada:** `v0.2.1-beta`
 <!-- latest-release:end -->
 
 ## Última actualización
 
 <!-- latest-summary:start -->
-- consolidar pantalla completa inmersiva e icono oficial.
-- corregir visibilidad de onResume para Capacitor 8.
+- Se añadió una nueva actualización de mantenimiento para la edición Android offline.
+- forzar el icono oficial en instalador y launcher.
 <!-- latest-summary:end -->
 
 ## Características
