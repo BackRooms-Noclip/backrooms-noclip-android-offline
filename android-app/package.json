@@ -1,7 +1,7 @@
 {
   "name": "backrooms-noclip-android-offline",
   "private": true,
-  "version": "0.2.0-beta",
+  "version": "0.2.0-beta.1",
   "description": "APK Android offline para BACKROOMS NoClip",
   "scripts": {
     "prepare:web": "node scripts/prepare-web.js",

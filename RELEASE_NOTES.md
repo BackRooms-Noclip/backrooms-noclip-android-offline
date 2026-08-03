@@ -1,18 +1,18 @@
 <!-- noclip:type=beta -->
 <!-- noclip:size=small -->
 
-# BackRooms-Noclip Android v0.2.0-beta
+# BackRooms-Noclip Android v0.2.0-beta.1
 
-integrar icono oficial de la aplicación. forzar pantalla completa inmersiva y ocultar barras del sistema.
+consolidar pantalla completa inmersiva e icono oficial. corregir visibilidad de onResume para Capacitor 8.
 
 ## ✨ Novedades
-- integrar icono oficial de la aplicación.
+- consolidar pantalla completa inmersiva e icono oficial.
 
 ## 🛠️ Cambios y mejoras
-- actualizar README principal y plantilla del changelog.
+- Se ajustaron componentes internos de la aplicación para mejorar la estabilidad general.
 
 ## 🐛 Correcciones
-- forzar pantalla completa inmersiva y ocultar barras del sistema.
+- corregir visibilidad de onResume para Capacitor 8.
 
 ## 🛡️ Seguridad
 - Se mantiene la verificación SHA-256 de la APK publicada en la Release.

@@ -1,7 +1,7 @@
 // Arranque: input, bucle de animación y pantalla de título.
 (function () {
   // versión visible del juego (Ajustes); súbela con cada tanda de cambios
-  window.VERSION_JUEGO = 'v0.2.0-beta';
+  window.VERSION_JUEGO = 'v0.2.0-beta.1';
   const world = Game.world;
   world.data = window.GAME_DATA;
 
