@@ -3,12 +3,20 @@
 Continuación comunitaria e independiente de **BACKROOMS — No-Clip**, adaptada como aplicación exclusiva para Android.
 
 <!-- latest-release:start -->
-**Última versión preparada:** `v0.1.0-beta.1`
+**Última versión preparada:** `v0.1.0-dev`
 <!-- latest-release:end -->
+
+## Última actualización
+
+<!-- latest-summary:start -->
+- Pendiente de publicar una actualización nueva.
+<!-- latest-summary:end -->
 
 ## Características
 
 - APK completamente jugable sin conexión.
+- Modo inmersivo Android para ocultar barras del sistema y aprovechar la pantalla completa.
+- Icono adaptado al estilo visual del juego.
 - Un jugador; no incluye servidor, cuentas online ni multijugador.
 - Perfiles, partidas, ajustes y Códice guardados localmente en el dispositivo.
 - Compilación, firma y publicación de la APK mediante GitHub Actions.
