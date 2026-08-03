@@ -1,0 +1,39 @@
+name: Verificar proyecto offline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Sintaxis JavaScript
+        run: |
+          set -e
+          for f in $(find game/js pipeline android-app/scripts -name '*.js' -not -path 'game/js/lib/*'); do
+            node --check "$f"
+          done
+
+      - name: Pruebas del juego
+        run: |
+          node pipeline/parse.test.js
+          node game/js/systems/game.test.js
+          node game/js/net/otros.test.js
+          node game/js/systems/rules.test.js
+          node game/js/sim/sala.test.js
+          node pipeline/level0-audit.js
+
+      - name: Archivos generados reproducibles
+        run: |
+          node pipeline/build-assets-manifest.js
+          git diff --exit-code game/js/assets-manifest.js
+          node pipeline/build-data.js
+          git diff --exit-code game/js/data.js

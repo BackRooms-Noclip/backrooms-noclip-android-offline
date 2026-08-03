@@ -1,0 +1,8 @@
+{
+  "appId": "com.backroomsnoclip.game",
+  "appName": "BackRooms NoClip",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

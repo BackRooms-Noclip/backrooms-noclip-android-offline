@@ -1,0 +1,129 @@
+name: Compilar APK y publicar Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versión, por ejemplo v0.1.0-beta.1'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.inputs.version || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar Capacitor y generar Android
+        working-directory: android-app
+        run: |
+          npm install --no-audit --no-fund
+          npm run android:init
+
+      - name: Configurar versión Android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os, re
+          version_name = os.environ['VERSION'].removeprefix('v')
+          version_code = int(os.environ['VERSION_CODE'])
+          candidates = [
+              Path('android-app/android/app/build.gradle'),
+              Path('android-app/android/app/build.gradle.kts'),
+          ]
+          gradle = next((p for p in candidates if p.exists()), None)
+          if gradle is None:
+              raise SystemExit('No se encontró build.gradle del módulo app')
+          text = gradle.read_text(encoding='utf-8')
+          if gradle.suffix == '.kts':
+              text, n1 = re.subn(r'versionCode\s*=\s*\d+', f'versionCode = {version_code}', text, count=1)
+              text, n2 = re.subn(r'versionName\s*=\s*["\'][^"\']+["\']', f'versionName = "{version_name}"', text, count=1)
+          else:
+              text, n1 = re.subn(r'versionCode\s+\d+', f'versionCode {version_code}', text, count=1)
+              text, n2 = re.subn(r'versionName\s+["\'][^"\']+["\']', f'versionName "{version_name}"', text, count=1)
+          if n1 != 1 or n2 != 1:
+              raise SystemExit('No se pudo actualizar versionCode/versionName')
+          gradle.write_text(text, encoding='utf-8')
+          print(f'Android versionCode={version_code}, versionName={version_name}')
+          PY
+
+      - name: Compilar APK release sin firma
+        working-directory: android-app/android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Firmar y verificar APK
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_B64" || { echo 'Falta ANDROID_KEYSTORE_BASE64'; exit 1; }
+          test -n "$KEYSTORE_PASSWORD" || { echo 'Falta ANDROID_KEYSTORE_PASSWORD'; exit 1; }
+          test -n "$KEY_ALIAS" || { echo 'Falta ANDROID_KEY_ALIAS'; exit 1; }
+          test -n "$KEY_PASSWORD" || { echo 'Falta ANDROID_KEY_PASSWORD'; exit 1; }
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/backrooms-release.jks"
+          UNSIGNED="android-app/android/app/build/outputs/apk/release/app-release-unsigned.apk"
+          test -f "$UNSIGNED" || { echo "No existe $UNSIGNED"; find android-app/android/app/build/outputs -type f; exit 1; }
+          BUILD_TOOLS="$(ls -1 "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          ZIPALIGN="$ANDROID_HOME/build-tools/$BUILD_TOOLS/zipalign"
+          APKSIGNER="$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner"
+          "$ZIPALIGN" -f -p 4 "$UNSIGNED" "$RUNNER_TEMP/backrooms-aligned.apk"
+          "$APKSIGNER" sign \
+            --ks "$RUNNER_TEMP/backrooms-release.jks" \
+            --ks-pass "pass:$KEYSTORE_PASSWORD" \
+            --ks-key-alias "$KEY_ALIAS" \
+            --key-pass "pass:$KEY_PASSWORD" \
+            --out backrooms-noclip-offline.apk \
+            "$RUNNER_TEMP/backrooms-aligned.apk"
+          "$APKSIGNER" verify --verbose --print-certs backrooms-noclip-offline.apk
+          sha256sum backrooms-noclip-offline.apk > backrooms-noclip-offline.apk.sha256
+
+      - name: Guardar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: backrooms-noclip-offline-${{ env.VERSION }}
+          path: |
+            backrooms-noclip-offline.apk
+            backrooms-noclip-offline.apk.sha256
+
+      - name: Crear o actualizar GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          EXTRA=""
+          case "$VERSION" in
+            *alpha*|*beta*|*rc*) EXTRA="--prerelease" ;;
+          esac
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release upload "$VERSION" \
+              backrooms-noclip-offline.apk \
+              backrooms-noclip-offline.apk.sha256 --clobber
+          else
+            gh release create "$VERSION" \
+              backrooms-noclip-offline.apk \
+              backrooms-noclip-offline.apk.sha256 \
+              --title "BACKROOMS NoClip Offline $VERSION" \
+              --notes-file RELEASE_NOTES.md $EXTRA
+          fi
