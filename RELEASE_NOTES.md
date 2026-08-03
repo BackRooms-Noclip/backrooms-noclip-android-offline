@@ -1,11 +1,26 @@
-## BACKROOMS — NoClip Android Offline v0.1.0-beta.1
+<!-- noclip:type=beta -->
+<!-- noclip:size=small -->
 
-APK firmada para Android, diseñada para funcionar completamente sin conexión.
+# BackRooms-Noclip Android v0.2.0-beta
 
-### Añadido
-- iniciar edición Android offline
+integrar icono oficial de la aplicación. forzar pantalla completa inmersiva y ocultar barras del sistema.
 
-### Instalación
-- Descarga `backrooms-noclip-offline.apk`.
-- Permite la instalación desde tu navegador o gestor de archivos cuando Android lo solicite.
-- Las actualizaciones futuras deben estar firmadas con la misma clave.
+## ✨ Novedades
+- integrar icono oficial de la aplicación.
+
+## 🛠️ Cambios y mejoras
+- actualizar README principal y plantilla del changelog.
+
+## 🐛 Correcciones
+- forzar pantalla completa inmersiva y ocultar barras del sistema.
+
+## 🛡️ Seguridad
+- Se mantiene la verificación SHA-256 de la APK publicada en la Release.
+
+## ⚠️ Problemas conocidos
+- El juego sigue limitado al modo offline para un jugador.
+
+## 📱 Requisitos
+- Android 8.0 o superior.
+- Arquitectura arm64-v8a.
+- Aproximadamente 500 MB de almacenamiento libre.

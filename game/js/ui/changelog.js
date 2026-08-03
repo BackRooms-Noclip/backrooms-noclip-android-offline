@@ -1,6 +1,7 @@
 // Generado por tools/release.py.
 (function () {
   const CHANGELOG = [
+    { v: "v0.2.0-beta", cambios: ["integrar icono oficial de la aplicación.", "actualizar README principal y plantilla del changelog.", "forzar pantalla completa inmersiva y ocultar barras del sistema.", "Se mantiene la verificación SHA-256 de la APK publicada en la Release.", "El juego sigue limitado al modo offline para un jugador.", "Android 8.0 o superior.", "Arquitectura arm64-v8a.", "Aproximadamente 500 MB de almacenamiento libre."] },
     { v: "v0.1.0-beta.1", cambios: ["iniciar edición Android offline"] },
     { v: "v0.1.0-dev", cambios: ["Base comunitaria exclusiva para Android.", "Empaquetado offline mediante Capacitor.", "Automatización de APK, firma, changelog, README y GitHub Releases.", "La interfaz principal ofrece únicamente el modo de un jugador.", "El motor de conexión funciona solo contra la simulación local incluida en la aplicación.", "Servidor MMO, despliegue web, salas privadas y controles de administración online.", "Marca personal anterior dentro de la interfaz y documentación del proyecto."] }
   ];

@@ -3,13 +3,14 @@
 Continuación comunitaria e independiente de **BACKROOMS — No-Clip**, adaptada como aplicación exclusiva para Android.
 
 <!-- latest-release:start -->
-**Última versión preparada:** `v0.1.0-dev`
+**Última versión preparada:** `v0.2.0-beta`
 <!-- latest-release:end -->
 
 ## Última actualización
 
 <!-- latest-summary:start -->
-- Pendiente de publicar una actualización nueva.
+- integrar icono oficial de la aplicación.
+- forzar pantalla completa inmersiva y ocultar barras del sistema.
 <!-- latest-summary:end -->
 
 ## Características
