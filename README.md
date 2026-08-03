@@ -3,7 +3,7 @@
 Continuación comunitaria e independiente de **BACKROOMS — No-Clip**, adaptada como aplicación exclusiva para Android.
 
 <!-- latest-release:start -->
-**Última versión preparada:** `v0.1.0-dev`
+**Última versión preparada:** `v0.1.0-beta.1`
 <!-- latest-release:end -->
 
 ## Características

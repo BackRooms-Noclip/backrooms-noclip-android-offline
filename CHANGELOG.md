@@ -2,6 +2,11 @@
 
 Todos los cambios importantes de la edición Android offline se documentarán aquí.
 
+## [v0.1.0-beta.1] - 2026-08-03
+
+### Añadido
+- iniciar edición Android offline
+
 ## [v0.1.0-dev] - Sin publicar
 
 ### Añadido
