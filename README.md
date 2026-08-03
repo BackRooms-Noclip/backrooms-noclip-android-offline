@@ -3,14 +3,14 @@
 Continuación comunitaria e independiente de **BACKROOMS — No-Clip**, adaptada como aplicación exclusiva para Android.
 
 <!-- latest-release:start -->
-**Última versión preparada:** `v0.2.1-beta`
+**Última versión preparada:** `v0.2.2-beta`
 <!-- latest-release:end -->
 
 ## Última actualización
 
 <!-- latest-summary:start -->
 - Se añadió una nueva actualización de mantenimiento para la edición Android offline.
-- forzar el icono oficial en instalador y launcher.
+- ocupar toda la pantalla y eliminar insets laterales.
 <!-- latest-summary:end -->
 
 ## Características

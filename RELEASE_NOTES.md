@@ -1,9 +1,9 @@
 <!-- noclip:type=beta -->
-<!-- noclip:size=medium -->
+<!-- noclip:size=small -->
 
-# BackRooms-Noclip Android v0.2.1-beta
+# BackRooms-Noclip Android v0.2.2-beta
 
-Se añadió una nueva actualización de mantenimiento para la edición Android offline. forzar el icono oficial en instalador y launcher.
+Se añadió una nueva actualización de mantenimiento para la edición Android offline. ocupar toda la pantalla y eliminar insets laterales.
 
 ## ✨ Novedades
 - Se añadió una nueva actualización de mantenimiento para la edición Android offline.
@@ -12,8 +12,7 @@ Se añadió una nueva actualización de mantenimiento para la edición Android o
 - Se ajustaron componentes internos de la aplicación para mejorar la estabilidad general.
 
 ## 🐛 Correcciones
-- forzar el icono oficial en instalador y launcher.
-- eliminar franjas y ocupar toda la pantalla.
+- ocupar toda la pantalla y eliminar insets laterales.
 
 ## 🛡️ Seguridad
 - Se mantiene la verificación SHA-256 de la APK publicada en la Release.
