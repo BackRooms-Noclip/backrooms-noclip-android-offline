@@ -871,3 +871,30 @@ body.espectando #touch-controls { display: none !important; }
 .btn-mode-solo .btn-mode-title { color: #ffe9a0; font-size: 24px; }
 .btn-mode-solo .btn-mode-sub { font-size: 12px; }
 .btn-mode-solo:hover { background: rgba(217,198,110,.14); border-color: #d9c66e; box-shadow: 0 0 26px rgba(217,198,110,.35); }
+
+
+/* Android nativo: el fondo y el render ocupan también el área del notch/cutout. */
+html.native-android,
+html.native-android body,
+html.native-android #app {
+  width: 100dvw;
+  height: 100dvh;
+  min-width: 100dvw;
+  min-height: 100dvh;
+}
+html.native-android #screen-game {
+  width: 100dvw;
+  height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+html.native-android #game-wrap {
+  width: 100dvw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+html.native-android #game-canvas,
+html.native-android #gl-canvas {
+  border: 0;
+}

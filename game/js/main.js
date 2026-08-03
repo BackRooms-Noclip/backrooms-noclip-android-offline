@@ -2,6 +2,8 @@
 (function () {
   // versión visible del juego (Ajustes); súbela con cada tanda de cambios
   window.VERSION_JUEGO = 'v0.2.0-beta.1';
+  const ES_ANDROID_NATIVO = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  document.documentElement.classList.toggle('native-android', ES_ANDROID_NATIVO);
   const world = Game.world;
   world.data = window.GAME_DATA;
 
@@ -392,79 +394,68 @@
   // resolución del monitor (nada de cuadro de 960×600 sobre fondo negro)
   function ajustarLienzo() {
     const fs = !!document.fullscreenElement;
-    // 1. Obtener la resolución elegida y su ratio
+    const vv = window.visualViewport;
+    const vw = Math.max(320, Math.floor(vv ? vv.width : window.innerWidth));
+    const vh = Math.max(200, Math.floor(vv ? vv.height : window.innerHeight));
+    const esTactil = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const llenarPantalla = ES_ANDROID_NATIVO || esTactil || fs;
+
     let resW = 960;
     let resH = 600;
     let auto = true;
-    let ratio = 16 / 9; // Por defecto auto 16:9
-    
+    let ratio = 16 / 9;
     let resOpt = (window.OPTS && window.OPTS.resolucion) || 'auto16x9';
-    if (resOpt === 'auto') resOpt = 'auto16x9'; // Fallback para guardado viejo
-    
-    if (resOpt === 'auto16x9') {
-      ratio = 16 / 9;
-      auto = true;
-    } else if (resOpt === 'auto16x10') {
-      ratio = 16 / 10;
-      auto = true;
-    } else {
+    if (resOpt === 'auto') resOpt = 'auto16x9';
+    if (resOpt === 'auto16x10') ratio = 16 / 10;
+    else if (resOpt !== 'auto16x9') {
       const parts = resOpt.split('x');
       if (parts.length === 2) {
-        resW = parseInt(parts[0], 10);
-        resH = parseInt(parts[1], 10);
+        resW = parseInt(parts[0], 10) || 960;
+        resH = parseInt(parts[1], 10) || 600;
         auto = false;
         ratio = resW / resH;
       }
     }
 
-    // 2. Calcular el tamaño de pantalla del contenedor (layout size)
-    let w = fs ? Math.max(320, window.innerWidth) : 960;
-    let h = fs ? Math.max(200, window.innerHeight) : 600;
-    if (!fs) {
-      const vv = window.visualViewport;
-      const vw = Math.max(320, Math.floor(vv ? vv.width : window.innerWidth));
-      const vh = Math.max(200, Math.floor(vv ? vv.height : window.innerHeight));
-      const esTactil = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-      const margen = esTactil ? 0 : 24;
-      
-      // Ajustar el contenedor al viewport respetando el ratio
+    let w = vw;
+    let h = vh;
+    if (!llenarPantalla) {
+      const margen = 24;
       w = vw - margen;
       h = vh - margen;
       if (w / h > ratio) w = Math.floor(h * ratio);
       else h = Math.floor(w / ratio);
-      
-      w = Math.max(320, w);
-      h = Math.max(200, h);
-    } else {
-      // En pantalla completa, reajustar para mantener el ratio con barras negras (letterbox)
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      w = vw;
-      h = vh;
-      if (w / h > ratio) w = Math.floor(h * ratio);
-      else h = Math.floor(w / ratio);
     }
-    
+    w = Math.max(320, w);
+    h = Math.max(200, h);
+
     document.documentElement.style.setProperty('--game-w', `${w}px`);
     document.documentElement.style.setProperty('--game-h', `${h}px`);
+    document.documentElement.style.setProperty('--vh', `${vh / 100}px`);
 
-    // 3. Establecer resolución interna del lienzo
-    let rw, rh;
+    let rw;
+    let rh;
     if (auto) {
-      // Si es auto, la resolución sigue exactamente al tamaño de pantalla
       rw = w;
       rh = h;
+    } else if (llenarPantalla) {
+      // Conserva aproximadamente el coste de la resolución elegida,
+      // pero adapta su relación de aspecto al dispositivo para no deformar ni dejar franjas.
+      const pixelBudget = Math.max(320 * 200, resW * resH);
+      const scale = Math.sqrt(pixelBudget / (w * h));
+      rw = Math.max(320, Math.round(w * scale));
+      rh = Math.max(200, Math.round(h * scale));
     } else {
-      // Si es manual, se usa exactamente la resolución elegida
       rw = resW;
       rh = resH;
     }
 
     if (canvas.width !== rw || canvas.height !== rh) {
-      canvas.width = rw; canvas.height = rh;
+      canvas.width = rw;
+      canvas.height = rh;
       if (use3D && Render3D.resize) Render3D.resize(rw, rh);
     }
-    document.body.classList.toggle('fs', fs);
+    document.body.classList.toggle('fs', fs || ES_ANDROID_NATIVO);
   }
   document.addEventListener('fullscreenchange', () => {
     const isFullscreen = !!document.fullscreenElement;

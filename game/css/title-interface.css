@@ -391,3 +391,14 @@
     transition: none !important;
   }
 }
+
+
+html.native-android #screen-title.title-interface-enabled {
+  width: 100dvw;
+  height: 100dvh;
+  padding: 0;
+}
+html.native-android #screen-title.title-interface-enabled .title-box {
+  margin-left: max(clamp(8px, 4.5vw, 74px), env(safe-area-inset-left));
+  margin-right: env(safe-area-inset-right);
+}
